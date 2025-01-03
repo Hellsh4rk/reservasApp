@@ -7,27 +7,17 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @State var personCount: Int = 1
-    
+struct ContentView: View {    
     var body: some View {
-        VStack {
+        VStack{
             Text("Little Lemon")
-            Text("Reservations")
-            Stepper {
-                Text("Reservation for: \(personCount)")
-            } onIncrement: {
-                personCount += 1
-            } onDecrement: {
-                personCount = (personCount == 1) ? 1 : personCount - 1
-            }
+            Text("Principal Page")
         }
         .padding()
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(personCount: 10)
-    }
+#Preview {
+    ContentView()
 }
+
