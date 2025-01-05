@@ -19,12 +19,9 @@ struct MainView: View {
                     Image("lemonlogo")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80, height: 80)
+                        .frame(width: 300, height: 300)
 
-                    Text("Little Lemon")
-                        .font(.system(size: 20))
-                        .frame(width: 120, height: 120, alignment: .center)
-                        .multilineTextAlignment(.center)
+
                 }
                 .padding()
             }
