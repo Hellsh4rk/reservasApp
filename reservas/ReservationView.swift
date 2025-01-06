@@ -1,18 +1,16 @@
-//
-//  ReservationForm.swift
-//  reservas
-//
-//  Created by Yahir Lope on 02/01/25.
-//
-
 import SwiftUI
 
+struct ReservationView: View {
+    @EnvironmentObject var reservationModel: ReservationModel
+    
+    @State private var customerName: String = ""
+    @State private var personCount: Int = 0
+    @State private var selectedDate: Date = Date()
+    
+    // Estado para controlar la alerta
+    @State private var showingAlert = false
 
-struct ReservationForm: View {
-    @State var customerName: String = ""
-    @State var personCount: Int = 0
-    @State var selectedDate: Date = Date()
-
+    // Formato de la fecha y hora
     var formattedDate: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
@@ -29,6 +27,7 @@ struct ReservationForm: View {
 
     var body: some View {
         VStack {
+            
             Text("Reservación")
                 .font(.title)
                 .fontDesign(.monospaced)
@@ -73,7 +72,6 @@ struct ReservationForm: View {
             .cornerRadius(10)
             .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
             
-
             if !customerName.isEmpty && personCount > 0 {
                 Text("Reservación a nombre de: \(customerName) para \(personCount) \(personCount == 1 ? "persona" : "personas") \(formattedDate)")
                     .font(.headline)
@@ -88,9 +86,21 @@ struct ReservationForm: View {
             Spacer()
 
             Button(action: {
-                print("Reservar")
+                // Verificamos si la reservación tiene los datos completos
+                if !customerName.isEmpty && personCount > 0 {
+                    // Actualizamos los detalles de la reservación en el modelo
+                    reservationModel.hasReservation = true
+                    reservationModel.reservationDetails = "Reservación a nombre de: \(customerName), para \(personCount) persona(s) \(formattedDate)"
+                    print("Reservación confirmada: \(reservationModel.reservationDetails)")
+                    
+                    // Esta es una forma de hacer que la vista se actualice correctamente
+                    showingAlert = true
+                } else {
+                    // Si faltan datos, no hacemos nada o mostramos un mensaje de error
+                    print("Por favor complete todos los campos")
+                }
             }) {
-                Text("Reservar")
+                Text("Confirmar Reservación")
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.accentColor)
@@ -106,9 +116,17 @@ struct ReservationForm: View {
         }
         .padding()
         .edgesIgnoringSafeArea(.bottom)
+        .alert(isPresented: $showingAlert) {
+            Alert(
+                title: Text("Confirmación de Reservación"),
+                message: Text(reservationModel.reservationDetails),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 
 #Preview {
-    ReservationForm()
+    ReservationView()
+        .environmentObject(ReservationModel())  // Asegúrate de pasar el environmentObject en el preview también
 }

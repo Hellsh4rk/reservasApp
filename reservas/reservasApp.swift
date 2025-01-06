@@ -8,10 +8,13 @@
 import SwiftUI
 
 @main
-struct reservasApp: App {
+struct MyApp: App {
+    @StateObject private var reservationModel = ReservationModel()  // Creación de la instancia del modelo
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(reservationModel)  // Pasa el modelo al entorno aquí
         }
     }
 }
