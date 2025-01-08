@@ -2,6 +2,9 @@ import SwiftUI
 
 struct ReservationView: View {
     @EnvironmentObject var reservationModel: ReservationModel
+    @Environment(\.presentationMode) var presentationMode  // Controla el modo de presentación
+    @Environment(\.dismiss) private var dismiss  // Variable para cerrar la vista actual
+
     
     @State private var customerName: String = ""
     @State private var personCount: Int = 0
@@ -120,7 +123,9 @@ struct ReservationView: View {
             Alert(
                 title: Text("Confirmación de Reservación"),
                 message: Text(reservationModel.reservationDetails),
-                dismissButton: .default(Text("OK"))
+                dismissButton: .default(Text("OK"), action: {
+                    dismiss()
+                })
             )
         }
     }
@@ -128,5 +133,5 @@ struct ReservationView: View {
 
 #Preview {
     ReservationView()
-        .environmentObject(ReservationModel())  // Asegúrate de pasar el environmentObject en el preview también
+        .environmentObject(ReservationModel())  
 }
